@@ -1,0 +1,43 @@
+// Colores
+$powder_blue: #95B8D1;
+$light_blue: #C3DFE0;
+$tufts_blue: #3C91E6;
+
+body{
+    h1{
+        color: $powder_blue;
+    }
+
+    #task_create{
+        background-color: $tufts_blue;
+        border-color: $tufts_blue;
+    }
+
+    .card-check, .card-actions{
+        padding: 1rem 1rem;
+
+        .custom-checkbox {
+            width: 2rem !important;
+            height: 2rem !important;
+            background-color: $powder_blue !important;
+            border: $powder_blue !important;
+        }
+
+        .custom-checkbox:checked {
+            background-color: $tufts_blue !important;
+            border: $tufts_blue !important;
+        }
+    }
+
+    .card-actions{
+        button{
+            background-color: $powder_blue !important;
+            border: $powder_blue !important;
+        }
+    }
+    
+    #tasks_list{
+        background-color: $light_blue;
+        border-radius: .25rem;
+    }
+}
