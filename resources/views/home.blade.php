@@ -9,8 +9,59 @@
         <main>
             <section>
                 <div class="row d-flex justify-content-center">
+                    @if ($errors->any())
+                        <div class="alert alert-danger col-8">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if (session()->has('success'))
+                        @include('layouts._partials.messages')
+                    @endif
+
                     <div class="d-flex justify-content-between col-8 pb-2 px-0">
-                        <button id="task_create" class="btn btn-primary btn-sm">Añadir tarea</button>
+                        <!-- Button trigger modal -->
+                        <button id="task_create" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#create_modal">Añadir tarea</button>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="create_modal" tabindex="-1" aria-labelledby="create_modal_label" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="create_modal_label">Nueva tarea</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form action="{{ route('tasks.store') }}" id="form_store" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            
+                                            <fieldset>
+                                                <legend>Disabled fieldset example</legend>
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Título de la tarea</label>
+                                                    <input type="text" id="title" name="title" class="form-control" placeholder="Título de la tarea" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="description" class="form-label">Descripción de la tarea</label>
+                                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                                </div>
+
+                                                <div class="mb-3 modal-footer text-end">
+                                                    <button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                                </div>
+                                            </fieldset>
+                                          </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div id="tasks_filter">
                             <select class="form-select" aria-label="Default select example">
@@ -22,95 +73,87 @@
 
                 <div class="row d-flex justify-content-center">
                     <div id="tasks_list" class="col-8 p-3">
-                        <div class="card d-flex flex-row align-items-center mb-2">
-                            <div class="card-check">
-                                <div class="form-check">
-                                    <input class="form-check-input custom-checkbox" type="checkbox" value="0" id="flexCheckDefault">
+                        @forelse($tasks as $task)
+                            <div class="card d-flex flex-row align-items-center mb-2">
+                                <div class="card-check">
+                                    <div class="form-check">
+                                        <input class="form-check-input custom-checkbox" type="checkbox" value="0" id="flexCheckDefault">
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title mb-0">{{ $task->title }}</h5>
+                                    <p class="card-text text-muted small">{{ $task->created_at }}</p>
+                                </div>
+
+                                <div class="card-actions d-flex flex-row">
+                                    <!-- Button trigger modal -->
+                                    <button class="btn btn-secondary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal" data-target="{{ $task->id }}">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
+                                            stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />
+                                        </svg>
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="edit_modal" tabindex="-1" aria-labelledby="edit_modal_label" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="edit_modal_label">Editar tarea</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <form action="{{ route('tasks.update', $task->id) }}" id="form_store" method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        
+                                                        <fieldset>
+                                                            <legend>Disabled fieldset example</legend>
+                                                            <div class="mb-3">
+                                                                <label for="title" class="form-label">Título de la tarea</label>
+                                                                <input type="text" id="title" name="title" class="form-control" value="{{ $task->title }}" required>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="description" class="form-label">Descripción de la tarea</label>
+                                                                <textarea class="form-control" id="description" name="description" rows="3">{{ $task->description }}</textarea>
+                                                            </div>
+
+                                                            <div class="mb-3 modal-footer text-end">
+                                                                <button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                                            </div>
+                                                        </fieldset>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <form action="{{ route('tasks.destroy', $task->id)}}" class="form_delete" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" class="btn btn-secondary btn-sm">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
+                                                stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
+                                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title mb-0">Tarea de prueba 1.</h5>
-                                <p class="card-text text-muted small">21:15, 26/05/2024.</p>
-                            </div>
-
-                            <div class="card-actions">
-                                <button class="btn btn-secondary btn-sm">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
-                                        stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />
-                                    </svg>
-                                </button>
-                                <button class="btn btn-secondary btn-sm">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
-                                        stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
-                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="card d-flex flex-row align-items-center mb-2">
-                            <div class="card-check">
-                                <div class="form-check">
-                                    <input class="form-check-input custom-checkbox" type="checkbox" value="0" id="flexCheckDefault">
+                            @empty
+                            <div class="card d-flex flex-row align-items-center mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-0">No hay tareas pendientes.</h5>
                                 </div>
                             </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title mb-0">Tarea de prueba 2.</h5>
-                                <p class="card-text text-muted small">21:25, 26/05/2024.</p>
-                            </div>
-
-                            <div class="card-actions">
-                                <button class="btn btn-secondary btn-sm">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
-                                        stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />
-                                    </svg>
-                                </button>
-                                <button class="btn btn-secondary btn-sm">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
-                                        stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
-                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="card d-flex flex-row align-items-center">
-                            <div class="card-check">
-                                <div class="form-check">
-                                    <input id="task_check" class="form-check-input custom-checkbox" type="checkbox" value="0" onclick="click_check()">
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title text-decoration-line-through text-muted mb-0">Tarea de prueba seleccionado.</h5>
-                                <p class="card-text text-muted small">21:25, 26/05/2024.</p>
-                            </div>
-
-                            <div class="card-actions">
-                                <button class="btn btn-secondary btn-sm">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
-                                        stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />
-                                    </svg>
-                                </button>
-                                <button class="btn btn-secondary btn-sm">
-                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
-                                        stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
-                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                 </div>
             </section>
