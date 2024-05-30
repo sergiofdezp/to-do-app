@@ -133,7 +133,7 @@
                                         </div>
                                     </div>
 
-                                    <form action="{{ route('tasks.destroy', $task->id)}}" class="form_delete" method="POST">
+                                    <form action="{{ route('tasks.destroy', $task->id)}}" class="form_delete mb-0" method="POST">
                                         @csrf
                                         @method('DELETE')
 
