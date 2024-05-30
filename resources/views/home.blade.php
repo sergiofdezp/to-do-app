@@ -77,7 +77,7 @@
                             <div class="card d-flex flex-row align-items-center mb-2">
                                 <div class="card-check">
                                     <div class="form-check">
-                                        <input class="form-check-input custom-checkbox" type="checkbox" value="0" id="flexCheckDefault">
+                                        <input class="form-check-input custom-checkbox" type="checkbox" value="{{ $task->id }}" id="task_check_{{ $task->id }}">
                                     </div>
                                 </div>
 
@@ -88,7 +88,7 @@
 
                                 <div class="card-actions d-flex flex-row">
                                     <!-- Button trigger modal -->
-                                    <button class="btn btn-secondary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal" data-target="{{ $task->id }}">
+                                    <button class="btn btn-secondary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ $task->id }}">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
                                             stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -97,29 +97,29 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="edit_modal" tabindex="-1" aria-labelledby="edit_modal_label" aria-hidden="true">
+                                    <div class="modal fade" id="edit_modal_{{ $task->id }}" tabindex="-1" aria-labelledby="edit_modal_label_{{ $task->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="edit_modal_label">Editar tarea</h1>
+                                                    <h1 class="modal-title fs-5" id="edit_modal_label_{{ $task->id }}">Editar tarea</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    <form action="{{ route('tasks.update', $task->id) }}" id="form_store" method="POST" enctype="multipart/form-data">
+                                                    <form action="{{ route('tasks.update', $task->id) }}" id="form_store_{{ $task->id }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
                                                         
                                                         <fieldset>
                                                             <legend>Disabled fieldset example</legend>
                                                             <div class="mb-3">
-                                                                <label for="title" class="form-label">Título de la tarea</label>
-                                                                <input type="text" id="title" name="title" class="form-control" value="{{ $task->title }}" required>
+                                                                <label for="title_{{ $task->id }}" class="form-label">Título de la tarea</label>
+                                                                <input type="text" id="title_{{ $task->id }}" name="title" class="form-control" value="{{ $task->title }}" required>
                                                             </div>
 
                                                             <div class="mb-3">
-                                                                <label for="description" class="form-label">Descripción de la tarea</label>
-                                                                <textarea class="form-control" id="description" name="description" rows="3">{{ $task->description }}</textarea>
+                                                                <label for="description_{{ $task->id }}" class="form-label">Descripción de la tarea</label>
+                                                                <textarea class="form-control" id="description_{{ $task->id }}" name="description" rows="3">{{ $task->description }}</textarea>
                                                             </div>
 
                                                             <div class="mb-3 modal-footer text-end">
@@ -160,3 +160,65 @@
         </main>
     </div>
 @endsection
+
+{{-- jQuery --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('.custom-checkbox').each(function(){
+            var task_id = $(this).val();
+            check_task_status(task_id);
+
+            $(this).click(function(){
+                check_task(task_id);
+            });
+        });
+    });
+
+    function check_task_status(task_id){
+        $.ajax({
+            type: "GET",
+            url: "/api/check_task_status",
+            data: {
+                task_id : task_id,
+            },
+            dataType: "json",
+
+            success: function(response){
+                console.log(response);
+
+                if(response.success == true){
+                    if (response.status == 1) {
+                        $('#task_check_' + task_id).prop('checked', false);
+                    } else if (response.status == 2) {
+                        $('#task_check_' + task_id).prop('checked', true);
+                    }
+                }
+            }
+        });
+    }
+    
+    function check_task(task_id){
+        $.ajax({
+            type: "GET",
+            url: "/api/change_task_status",
+            data: {
+                task_id : task_id,
+            },
+            dataType: "json",
+
+            success: function(response){
+                console.log(response);
+
+                if(response.success == true){
+                    if (response.status == 1) {
+                        $('#task_check_' + task_id).prop('checked', false);
+                    } else if (response.status == 2) {
+                        $('#task_check_' + task_id).prop('checked', true);
+                    }
+                }
+            }
+        });
+    }
+</script>

@@ -34,7 +34,7 @@ class TaskController extends Controller
         $new_task = [
             'title' => $request->title,
             'description' => $request->description,
-            'status_id' => 0,
+            'status_id' => 1,
             'user_id' => $user->id,
         ];
 
@@ -61,5 +61,41 @@ class TaskController extends Controller
         $task->delete();
         
         return redirect()->route('home')->with('success', 'La tarea: '. $task->title .' ha sido eliminada correctamente.');
+    }
+
+    // Cambia el estado del checkbox en la vista en la primera carga.
+    public function check_task_status(Request $task_id){
+        $task = $this->select_task($task_id);
+
+        return response()->json(['success'=> true, 'status'=> $task->status_id]);
+    }
+
+    // Cambia el estado de una tarea, de pendiente a terminada y viceversa.
+    public function change_task_status(Request $task_id){
+        $task = $this->select_task($task_id);
+
+        // Evalua el estado actual de la tarea para despues cambiarlo.
+        if($task->status_id == 1){
+            $task->status_id = 2;
+        } else if($task->status_id == 2){
+            $task->status_id = 1;
+        }
+
+        $new_task_status = [
+            'status_id' => $task->status_id,
+        ];
+
+        $task->update($new_task_status);
+
+        return response()->json(['success'=> true, 'status'=> $task->status_id]);
+    }
+
+    // Recibe un id y devuelve una tarea.
+    public function select_task($task_id){
+        $task_id = $task_id->get('task_id');
+
+        $task = Task::all()->where('id', $task_id)->first();
+
+        return $task;
     }
 }
