@@ -98,4 +98,17 @@ class TaskController extends Controller
 
         return $task;
     }
+
+    // Filtra las tareas según su estado.
+    public function filter_tasks(Request $status_id){
+        $status_id = $status_id->get('status_id');
+
+        if($status_id == 0){
+            $tasks = Task::all();
+        } else{
+            $tasks = Task::where('status_id', $status_id)->get();
+        }
+
+        return response()->json(['success'=> true, 'tasks' => $tasks]);
+    }
 }
