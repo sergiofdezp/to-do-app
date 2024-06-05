@@ -10,6 +10,7 @@ use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 
 use Auth;
+use Illuminate\Http\JsonResponse;
 
 class TaskController extends Controller
 {
@@ -64,14 +65,19 @@ class TaskController extends Controller
     }
 
     // Cambia el estado del checkbox en la vista en la primera carga.
-    public function check_task_status(Request $task_id){
+    public function check_task_status(Request $task_id) : JsonResponse
+    {
         $task = $this->select_task($task_id);
 
-        return response()->json(['success'=> true, 'status'=> $task->status_id]);
+        return response()->json([
+            'success'=> true, 
+            'status'=> $task->status_id
+        ], 201);
     }
 
     // Cambia el estado de una tarea, de pendiente a terminada y viceversa.
-    public function change_task_status(Request $task_id){
+    public function change_task_status(Request $task_id) : JsonResponse
+    {
         $task = $this->select_task($task_id);
 
         // Evalua el estado actual de la tarea para despues cambiarlo.
@@ -87,11 +93,15 @@ class TaskController extends Controller
 
         $task->update($new_task_status);
 
-        return response()->json(['success'=> true, 'status'=> $task->status_id]);
+        return response()->json([
+            'success'=> true, 
+            'status'=> $task->status_id
+        ], 200);
     }
 
     // Recibe un id y devuelve una tarea.
-    public function select_task($task_id){
+    public function select_task($task_id)
+    {
         $task_id = $task_id->get('task_id');
 
         $task = Task::all()->where('id', $task_id)->first();
@@ -100,7 +110,8 @@ class TaskController extends Controller
     }
 
     // Filtra las tareas según su estado.
-    public function filter_tasks(Request $status_id){
+    public function filter_tasks(Request $status_id) : JsonResponse
+    {
         $status_id = $status_id->get('status_id');
 
         if($status_id == 0){
@@ -109,6 +120,9 @@ class TaskController extends Controller
             $tasks = Task::where('status_id', $status_id)->get();
         }
 
-        return response()->json(['success'=> true, 'tasks' => $tasks]);
+        return response()->json([
+            'success'=> true, 
+            'tasks' => $tasks
+        ], 200);
     }
 }
