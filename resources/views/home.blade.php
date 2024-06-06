@@ -89,6 +89,19 @@
                                 </div>
 
                                 <div class="card-actions d-flex flex-row">
+                                    <form action="{{ route('tasks.archive', $task->id)}}" class="form_archive mb-0" method="POST">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <button type="submit" class="btn btn-secondary btn-blue btn-sm">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
+                                                stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+                                                <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" />
+                                            </svg>
+                                        </button>
+                                    </form>
+
                                     <!-- Button trigger modal -->
                                     <button class="btn btn-secondary btn-blue btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ $task->id }}">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
@@ -242,88 +255,112 @@
                     var tasks_list = document.getElementById('tasks_list');
                     tasks_list.innerHTML = '';
 
-                    response.tasks.forEach(function(task) {
-                        // Card HTML
-                        const taskHTML = 
+                    if (response.tasks.length === 0) {
+                        // Si no hay tareas, mostramos un mensaje de error
+                        tasks_list.innerHTML = 
                             '<div class="card d-flex flex-row align-items-center mb-2">' +
-                                '<div class="card-check">' +
-                                    '<div class="form-check">' +
-                                        '<input class="form-check-input custom-checkbox" type="checkbox" value="' + task.id + '" id="task_check_' + task.id + '"' + (task.status_id === 2 ? ' checked' : '') + '>' +
-                                    '</div>' +
-                                '</div>' +
-
                                 '<div class="card-body">' +
-                                    '<h5 class="card-title mb-0">' + task.title + '</h5>' +
-                                    '<p class="card-text text-muted small">' + task.created_at + '</p>' +
+                                    '<h5 class="card-title mb-0">No hay tareas pendientes.</h5>' +
                                 '</div>' +
+                            '</div>';
+                    } else {
 
-                                '<div class="card-actions d-flex flex-row">' +
-                                    '<button class="btn btn-secondary btn-blue btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_' + task.id + '">' +
-                                        '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"' +
-                                            'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">' +
-                                            '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />' +
-                                            '<path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />' +
-                                        '</svg>' +
-                                    '</button>' +
-
-                                    '<div class="modal fade" id="edit_modal_' + task.id + '" tabindex="-1" aria-labelledby="edit_modal_label_' + task.id + '" aria-hidden="true">' +
-                                        '<div class="modal-dialog modal-dialog-centered">' +
-                                            '<div class="modal-content">' +
-                                                '<div class="modal-header">' +
-                                                    '<h2 class="modal-title fs-5" id="edit_modal_label_' + task.id + '">Editar tarea</h2>' +
-                                                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
-                                                '</div>' +
-
-                                                '<div class="modal-body">' +
-                                                    '<form action="{{ route('tasks.update', $task->id) }}" id="form_store_' + task.id + '" method="POST" enctype="multipart/form-data">' +
-                                                        '@csrf' +
-                                                        '@method('PUT')' +
-                                                    
-                                                        '<fieldset>' +
-                                                            '<div class="mb-3">' +
-                                                                '<label for="title_' + task.id + '" class="form-label">Título de la tarea</label>' +
-                                                                '<input type="text" id="title_' + task.id + '" name="title" class="form-control" value="' + task.title + '" required>' +
-                                                            '</div>' +
-
-                                                            '<div class="mb-3">' +
-                                                                '<label for="description_' + task.id + '" class="form-label">Descripción de la tarea</label>' +
-                                                                '<textarea class="form-control" id="description_' + task.id + '" name="description" rows="3">' + task.description + '</textarea>' +
-                                                            '</div>' +
-
-                                                            '<div class="modal-footer text-end pb-0">' +
-                                                                '<button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>' +
-                                                                '<button type="submit" class="btn btn-success btn-tufts">Guardar</button>' +
-                                                            '</div>' +
-                                                        '</fieldset>' +
-                                                    '</form>' +
-                                                '</div>' +
-                                            '</div>' +
+                        response.tasks.forEach(function(task) {
+                            // Card HTML
+                            const taskHTML = 
+                                '<div class="card d-flex flex-row align-items-center mb-2">' +
+                                    '<div class="card-check">' +
+                                        '<div class="form-check">' +
+                                            '<input class="form-check-input custom-checkbox" type="checkbox" value="' + task.id + '" id="task_check_' + task.id + '"' + (task.status_id === 2 ? ' checked' : '') + '>' +
                                         '</div>' +
                                     '</div>' +
 
-                                    '<form action="{{ route('tasks.destroy', $task->id)}}" class="form_delete mb-0" method="POST">' +
-                                        '@csrf' +
-                                        '@method('DELETE')' +
+                                    '<div class="card-body">' +
+                                        '<h5 class="card-title mb-0">' + task.title + '</h5>' +
+                                        '<p class="card-text text-muted small">' + task.created_at + '</p>' +
+                                    '</div>' +
 
-                                        '<button type="submit" class="btn btn-secondary btn-blue btn-sm">' +
+                                    '<div class="card-actions d-flex flex-row">' +
+                                        '<form action="/archive/' + task.id + '" class="form_archive mb-0" method="POST">' +
+                                            '@csrf' +
+                                            '@method('PUT')' +
+
+                                            '<button type="submit" class="btn btn-secondary btn-blue btn-sm">' +
+                                                '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"' +
+                                                    'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-archive">' +
+                                                    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />' +
+                                                    '<path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" />' +
+                                                '</svg>' +
+                                            '</button>' +
+                                        '</form>' +
+
+                                        '<button class="btn btn-secondary btn-blue btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_' + task.id + '">' +
                                             '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"' +
-                                                'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">' +
-                                                '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />' +
-                                                '<path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />' +
+                                                'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">' +
+                                                '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />' +
+                                                '<path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />' +
                                             '</svg>' +
                                         '</button>' +
-                                    '</form>' +
-                                '</div>' +
-                            '</div>';
 
-                        // insertAdjacentHTML permite que cada checkbox tenga su propio evento.
-                        tasks_list.insertAdjacentHTML('beforeend', taskHTML);
+                                        '<div class="modal fade" id="edit_modal_' + task.id + '" tabindex="-1" aria-labelledby="edit_modal_label_' + task.id + '" aria-hidden="true">' +
+                                            '<div class="modal-dialog modal-dialog-centered">' +
+                                                '<div class="modal-content">' +
+                                                    '<div class="modal-header">' +
+                                                        '<h2 class="modal-title fs-5" id="edit_modal_label_' + task.id + '">Editar tarea</h2>' +
+                                                        '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                                                    '</div>' +
 
-                        // Evento click para los check.
-                        document.getElementById('task_check_' + task.id).addEventListener('click', function() {
-                            check_task(task.id)
+                                                    '<div class="modal-body">' +
+                                                        '<form action="/tasks/' + task.id + '" id="form_store_' + task.id + '" method="POST" enctype="multipart/form-data">' +
+                                                            '@csrf' +
+                                                            '@method('PUT')' +
+                                                        
+                                                            '<fieldset>' +
+                                                                '<div class="mb-3">' +
+                                                                    '<label for="title_' + task.id + '" class="form-label">Título de la tarea</label>' +
+                                                                    '<input type="text" id="title_' + task.id + '" name="title" class="form-control" value="' + task.title + '" required>' +
+                                                                '</div>' +
+
+                                                                '<div class="mb-3">' +
+                                                                    '<label for="description_' + task.id + '" class="form-label">Descripción de la tarea</label>' +
+                                                                    '<textarea class="form-control" id="description_' + task.id + '" name="description" rows="3">' + task.description + '</textarea>' +
+                                                                '</div>' +
+
+                                                                '<div class="modal-footer text-end pb-0">' +
+                                                                    '<button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>' +
+                                                                    '<button type="submit" class="btn btn-success btn-tufts">Guardar</button>' +
+                                                                '</div>' +
+                                                            '</fieldset>' +
+                                                        '</form>' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>' +
+
+                                        '<form action="/tasks/' + task.id + '" class="form_delete mb-0" method="POST">' +
+                                            '@csrf' +
+                                            '@method('DELETE')' +
+
+                                            '<button type="submit" class="btn btn-secondary btn-blue btn-sm">' +
+                                                '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"' +
+                                                    'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">' +
+                                                    '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />' +
+                                                    '<path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />' +
+                                                '</svg>' +
+                                            '</button>' +
+                                        '</form>' +
+                                    '</div>' +
+                                '</div>';
+
+                            // insertAdjacentHTML permite que cada checkbox tenga su propio evento.
+                            tasks_list.insertAdjacentHTML('beforeend', taskHTML);
+
+                            // Evento click para los check.
+                            document.getElementById('task_check_' + task.id).addEventListener('click', function() {
+                                check_task(task.id)
+                            });
                         });
-                    });
+                    }
                 }
             }
         });

@@ -17,7 +17,7 @@ class TaskController extends Controller
     public function index() : View
     {
         $user = Auth::user();
-        $tasks = Task::all()->where('user_id', $user->id);
+        $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->get();
 
         return view("home", compact("tasks"));
     }
@@ -62,6 +62,18 @@ class TaskController extends Controller
         $task->delete();
         
         return redirect()->route('home')->with('success', 'La tarea: '. $task->title .' ha sido eliminada correctamente.');
+    }
+
+    public function archive(Request $request, Task $task){
+        $task_updated = $request->all();
+
+        $task_updated = [
+            'status_id' => 3,
+        ];
+
+        $task->update($task_updated);
+
+        return redirect()->route('home')->with('success', 'La tarea ha sido archivada correctamente.');
     }
 
     // Cambia el estado del checkbox en la vista en la primera carga.
@@ -113,11 +125,12 @@ class TaskController extends Controller
     public function filter_tasks(Request $status_id) : JsonResponse
     {
         $status_id = $status_id->get('status_id');
+        $user = Auth::user();
 
         if($status_id == 0){
-            $tasks = Task::all();
+            $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->get();
         } else{
-            $tasks = Task::where('status_id', $status_id)->get();
+            $tasks = Task::where('user_id', $user->id)->where('status_id', $status_id)->get();
         }
 
         return response()->json([

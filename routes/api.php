@@ -11,4 +11,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/check_task_status', [TaskController::class, 'check_task_status']);
 Route::get('/change_task_status', [TaskController::class, 'change_task_status']);
+
 Route::get('/filter_tasks', [TaskController::class, 'filter_tasks']);

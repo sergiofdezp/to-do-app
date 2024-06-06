@@ -12,7 +12,9 @@ Route::middleware('auth')->group(function () {
     
     // Tasks
     Route::get('/', [TaskController::class, 'index'])->name('home');
-    Route::resource('/tasks', TaskController::class)->names('tasks'); 
+    Route::resource('/tasks', TaskController::class)->names('tasks');
+
+    Route::put('/archive/{task}', TaskController::class .'@archive')->name('tasks.archive');
 });
 
 require __DIR__.'/auth.php';
