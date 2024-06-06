@@ -25,14 +25,14 @@
 
                     <div class="d-flex justify-content-between col-8 pb-2 px-0">
                         <!-- Button trigger modal -->
-                        <button id="task_create" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#create_modal">Añadir tarea</button>
+                        <button class="btn btn-primary btn-tufts btn-sm" data-bs-toggle="modal" data-bs-target="#create_modal">Añadir tarea</button>
                         
                         <!-- Modal -->
                         <div class="modal fade" id="create_modal" tabindex="-1" aria-labelledby="create_modal_label" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="create_modal_label">Nueva tarea</h1>
+                                        <h2 class="modal-title fs-5" id="create_modal_label">Nueva tarea</h2>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
@@ -41,7 +41,6 @@
                                             @csrf
                                             
                                             <fieldset>
-                                                <legend>Disabled fieldset example</legend>
                                                 <div class="mb-3">
                                                     <label for="title" class="form-label">Título de la tarea</label>
                                                     <input type="text" id="title" name="title" class="form-control" placeholder="Título de la tarea" required>
@@ -52,9 +51,9 @@
                                                     <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                                                 </div>
 
-                                                <div class="mb-3 modal-footer text-end">
+                                                <div class="modal-footer text-end px-0 pb-0">
                                                     <button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                                                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                                    <button type="submit" class="btn btn-success btn-tufts">Guardar</button>
                                                 </div>
                                             </fieldset>
                                           </form>
@@ -91,7 +90,7 @@
 
                                 <div class="card-actions d-flex flex-row">
                                     <!-- Button trigger modal -->
-                                    <button class="btn btn-secondary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ $task->id }}">
+                                    <button class="btn btn-secondary btn-blue btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ $task->id }}">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
                                             stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -104,7 +103,7 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="edit_modal_label_{{ $task->id }}">Editar tarea</h1>
+                                                    <h2 class="modal-title fs-5" id="edit_modal_label_{{ $task->id }}">Editar tarea</h2>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
@@ -114,7 +113,6 @@
                                                         @method('PUT')
                                                         
                                                         <fieldset>
-                                                            <legend>Disabled fieldset example</legend>
                                                             <div class="mb-3">
                                                                 <label for="title_{{ $task->id }}" class="form-label">Título de la tarea</label>
                                                                 <input type="text" id="title_{{ $task->id }}" name="title" class="form-control" value="{{ $task->title }}" required>
@@ -125,9 +123,9 @@
                                                                 <textarea class="form-control" id="description_{{ $task->id }}" name="description" rows="3">{{ $task->description }}</textarea>
                                                             </div>
 
-                                                            <div class="mb-3 modal-footer text-end">
+                                                            <div class="modal-footer text-end pb-0">
                                                                 <button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                                                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                                                <button type="submit" class="btn btn-success btn-tufts">Guardar</button>
                                                             </div>
                                                         </fieldset>
                                                     </form>
@@ -140,7 +138,7 @@
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit" class="btn btn-secondary btn-sm">
+                                        <button type="submit" class="btn btn-secondary btn-blue btn-sm">
                                             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"
                                                 stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
@@ -260,7 +258,7 @@
                                 '</div>' +
 
                                 '<div class="card-actions d-flex flex-row">' +
-                                    '<button class="btn btn-secondary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_' + task.id + '">' +
+                                    '<button class="btn btn-secondary btn-blue btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#edit_modal_' + task.id + '">' +
                                         '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"' +
                                             'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">' +
                                             '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />' +
@@ -272,7 +270,7 @@
                                         '<div class="modal-dialog modal-dialog-centered">' +
                                             '<div class="modal-content">' +
                                                 '<div class="modal-header">' +
-                                                    '<h1 class="modal-title fs-5" id="edit_modal_label_' + task.id + '">Editar tarea</h1>' +
+                                                    '<h2 class="modal-title fs-5" id="edit_modal_label_' + task.id + '">Editar tarea</h2>' +
                                                     '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
                                                 '</div>' +
 
@@ -282,7 +280,6 @@
                                                         '@method('PUT')' +
                                                     
                                                         '<fieldset>' +
-                                                            '<legend>Disabled fieldset example</legend>' +
                                                             '<div class="mb-3">' +
                                                                 '<label for="title_' + task.id + '" class="form-label">Título de la tarea</label>' +
                                                                 '<input type="text" id="title_' + task.id + '" name="title" class="form-control" value="' + task.title + '" required>' +
@@ -293,9 +290,9 @@
                                                                 '<textarea class="form-control" id="description_' + task.id + '" name="description" rows="3">' + task.description + '</textarea>' +
                                                             '</div>' +
 
-                                                            '<div class="mb-3 modal-footer text-end">' +
+                                                            '<div class="modal-footer text-end pb-0">' +
                                                                 '<button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>' +
-                                                                '<button type="submit" class="btn btn-primary btn-sm">Guardar</button>' +
+                                                                '<button type="submit" class="btn btn-success btn-tufts">Guardar</button>' +
                                                             '</div>' +
                                                         '</fieldset>' +
                                                     '</form>' +
@@ -308,7 +305,7 @@
                                         '@csrf' +
                                         '@method('DELETE')' +
 
-                                        '<button type="submit" class="btn btn-secondary btn-sm">' +
+                                        '<button type="submit" class="btn btn-secondary btn-blue btn-sm">' +
                                             '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"' +
                                                 'stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash">' +
                                                 '<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />' +

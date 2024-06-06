@@ -8,9 +8,14 @@ body{
         color: $powder_blue;
     }
 
-    #task_create{
+    .btn-tufts{
         background-color: $tufts_blue;
         border-color: $tufts_blue;
+    }
+
+    .btn-tufts:hover{
+        background-color: $powder_blue;
+        border-color: $powder_blue;
     }
 
     .card-check, .card-actions{
@@ -21,6 +26,8 @@ body{
             height: 2rem !important;
             background-color: $powder_blue !important;
             border: $powder_blue !important;
+
+            cursor: pointer;
         }
 
         .custom-checkbox:checked {
@@ -30,9 +37,14 @@ body{
     }
 
     .card-actions{
-        button{
+        .btn-blue{
             background-color: $powder_blue !important;
             border: $powder_blue !important;
+        }
+
+        .btn-blue:hover{
+            background-color: $tufts_blue !important;
+            border: $tufts_blue !important;
         }
     }
     
