@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\TaskRequest;
 
 use App\Models\Task;
 
 use Auth;
-use Illuminate\Http\JsonResponse;
 
 class TaskController extends Controller
 {
@@ -132,6 +132,17 @@ class TaskController extends Controller
         } else{
             $tasks = Task::where('user_id', $user->id)->where('status_id', $status_id)->orderBy('status_id','asc')->get();
         }
+
+        $tasks = $tasks->map(function ($task) {
+            return [
+                'id' => $task->id,
+                'title' => $task->title,
+                'description' => $task->description,
+                'status_id' => $task->status_id,
+                'created_at' => $task->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $task->updated_at->format('Y-m-d H:i:s'),
+            ];
+        });
 
         return response()->json([
             'success'=> true, 
