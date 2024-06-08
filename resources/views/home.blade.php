@@ -84,7 +84,7 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <h5 class="card-title mb-0">{{ $task->title }}</h5>
+                                    <h5 class="card-title-{{ $task->id }} mb-0">{{ $task->title }}</h5>
                                     <p class="card-text text-muted small">{{ $task->created_at }}</p>
                                 </div>
 
@@ -209,8 +209,14 @@
                 if(response.success == true){
                     if (response.status == 1) {
                         $('#task_check_' + task_id).prop('checked', false);
+
+                        $('.card-title-' + task_id).removeClass("text-decoration-line-through");
+                        $('.card-title-' + task_id).removeClass("text-muted");
                     } else if (response.status == 2) {
                         $('#task_check_' + task_id).prop('checked', true);
+
+                        $('.card-title-' + task_id).addClass("text-decoration-line-through");
+                        $('.card-title-' + task_id).addClass("text-muted");
                     }
                 }
             }
@@ -231,8 +237,14 @@
                 if(response.success == true){
                     if (response.status == 1) {
                         $('#task_check_' + task_id).prop('checked', false);
+
+                        $('.card-title-' + task_id).removeClass("text-decoration-line-through");
+                        $('.card-title-' + task_id).removeClass("text-muted");
                     } else if (response.status == 2) {
                         $('#task_check_' + task_id).prop('checked', true);
+
+                        $('.card-title-' + task_id).addClass("text-decoration-line-through");
+                        $('.card-title-' + task_id).addClass("text-muted");
                     }
                 }
             }
@@ -276,7 +288,7 @@
                                     '</div>' +
 
                                     '<div class="card-body">' +
-                                        '<h5 class="card-title mb-0">' + task.title + '</h5>' +
+                                        '<h5 class="card-title-' + task.id + ' mb-0">' + task.title + '</h5>' +
                                         '<p class="card-text text-muted small">' + task.created_at + '</p>' +
                                     '</div>' +
 
