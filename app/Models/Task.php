@@ -14,6 +14,7 @@ class Task extends Model
         'description',
         'status_id',
         'user_id',
+        'archived'
     ];
 
     public function user(){

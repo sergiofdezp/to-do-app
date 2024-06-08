@@ -17,7 +17,7 @@ class TaskController extends Controller
     public function index() : View
     {
         $user = Auth::user();
-        $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->orderBy('status_id','asc')->get();
+        $tasks = Task::where('user_id', $user->id)->where('archived','<>', 1)->orderBy('status_id','asc')->get();
 
         return view("home", compact("tasks"));
     }
@@ -37,6 +37,7 @@ class TaskController extends Controller
             'description' => $request->description,
             'status_id' => 1,
             'user_id' => $user->id,
+            'archived' => 0,
         ];
 
         Task::create($new_task);
@@ -68,7 +69,7 @@ class TaskController extends Controller
         $task_updated = $request->all();
 
         $task_updated = [
-            'status_id' => 3,
+            'archived' => 1,
         ];
 
         $task->update($task_updated);
@@ -128,9 +129,11 @@ class TaskController extends Controller
         $user = Auth::user();
 
         if($status_id == 0){
-            $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->orderBy('status_id','asc')->get();
-        } else{
-            $tasks = Task::where('user_id', $user->id)->where('status_id', $status_id)->orderBy('status_id','asc')->get();
+            $tasks = Task::where('user_id', $user->id)->where('archived', 0)->orderBy('status_id','asc')->get();
+        } else if($status_id == 1 || $status_id == 2){
+            $tasks = Task::where('user_id', $user->id)->where('archived', 0)->where('status_id', $status_id)->orderBy('status_id','asc')->get();
+        } else if($status_id == 3){
+            $tasks = Task::where('user_id', $user->id)->where('archived', 1)->orderBy('status_id','asc')->get();
         }
 
         $tasks = $tasks->map(function ($task) {

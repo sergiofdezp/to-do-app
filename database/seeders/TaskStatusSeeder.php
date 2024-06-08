@@ -20,9 +20,5 @@ class TaskStatusSeeder extends Seeder
         DB::table('task_status')->insert([
             'status' => "Terminada",
         ]);
-
-        DB::table('task_status')->insert([
-            'status' => "Archivada",
-        ]);
     }
 }
