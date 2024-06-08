@@ -17,7 +17,7 @@ class TaskController extends Controller
     public function index() : View
     {
         $user = Auth::user();
-        $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->get();
+        $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->orderBy('status_id','asc')->get();
 
         return view("home", compact("tasks"));
     }
@@ -128,9 +128,9 @@ class TaskController extends Controller
         $user = Auth::user();
 
         if($status_id == 0){
-            $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->get();
+            $tasks = Task::where('user_id', $user->id)->where('status_id','<>', 3)->orderBy('status_id','asc')->get();
         } else{
-            $tasks = Task::where('user_id', $user->id)->where('status_id', $status_id)->get();
+            $tasks = Task::where('user_id', $user->id)->where('status_id', $status_id)->orderBy('status_id','asc')->get();
         }
 
         return response()->json([
