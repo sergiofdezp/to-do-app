@@ -52,4 +52,14 @@ body{
         background-color: $light_blue;
         border-radius: .25rem;
     }
+
+    @media only screen and (max-width: 425px) {
+        .card-body{
+            padding-bottom: 8px;
+        }
+        
+        .card-actions{
+            padding-top: 0;
+        }
+    }
 }

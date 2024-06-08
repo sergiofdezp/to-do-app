@@ -23,7 +23,7 @@
                         @include('layouts._partials.messages')
                     @endif
 
-                    <div class="d-flex justify-content-between col-8 pb-2 px-0">
+                    <div class="d-flex justify-content-between col-10 col-sm-8 mx-auto pb-2 px-0">
                         <!-- Button trigger modal -->
                         <button class="btn btn-primary btn-tufts btn-sm" data-bs-toggle="modal" data-bs-target="#create_modal">Añadir tarea</button>
                         
@@ -74,18 +74,20 @@
                 </div>
 
                 <div class="row d-flex justify-content-center">
-                    <div id="tasks_list" class="col-8 p-3">
+                    <div id="tasks_list" class="col-10 col-sm-8 mx-auto p-3">
                         @forelse($tasks as $task)
-                            <div class="card d-flex flex-row align-items-center mb-2">
-                                <div class="card-check">
-                                    <div class="form-check">
-                                        <input class="form-check-input custom-checkbox" type="checkbox" value="{{ $task->id }}" id="task_check_{{ $task->id }}">
+                            <div class="card d-flex flex-row flex-wrap align-items-center d-xs-flex justify-content-center mb-2">
+                                <div class="card-body d-flex flex-row align-items-center">
+                                    <div class="card-check">
+                                        <div class="form-check">
+                                            <input class="form-check-input custom-checkbox mt-0" type="checkbox" value="{{ $task->id }}" id="task_check_{{ $task->id }}">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title-{{ $task->id }} mb-0">{{ $task->title }}</h5>
-                                    <p class="card-text text-muted small">{{ $task->created_at }}</p>
+                                    <div class="card-details px-0">
+                                        <h5 class="card-title-{{ $task->id }} mb-0 text-xs-center text-md-start">{{ $task->title }}</h5>
+                                        <p class="card-text text-muted small">{{ $task->created_at }}</p>
+                                    </div>
                                 </div>
 
                                 <div class="card-actions d-flex flex-row">
