@@ -288,7 +288,7 @@
                                     '</div>' +
 
                                     '<div class="card-body">' +
-                                        '<h5 class="card-title-' + task.id + ' mb-0">' + task.title + '</h5>' +
+                                        '<h5 class="card-title-' + task.id + ' ' + (task.status_id === 2 ? ' text-decoration-line-through text-muted ' : '') + ' mb-0">' + task.title + '</h5>' +
                                         '<p class="card-text text-muted small">' + task.created_at + '</p>' +
                                     '</div>' +
 
