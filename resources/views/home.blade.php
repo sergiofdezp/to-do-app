@@ -166,7 +166,7 @@
                             @empty
                             <div class="card d-flex flex-row align-items-center mb-2">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-0">No hay tareas pendientes.</h5>
+                                    <h5 class="card-title mb-0">No hay tareas.</h5>
                                 </div>
                             </div>
                         @endforelse
@@ -274,7 +274,7 @@
                         tasks_list.innerHTML = 
                             '<div class="card d-flex flex-row align-items-center mb-2">' +
                                 '<div class="card-body">' +
-                                    '<h5 class="card-title mb-0">No hay tareas pendientes.</h5>' +
+                                    '<h5 class="card-title mb-0">No hay tareas.</h5>' +
                                 '</div>' +
                             '</div>';
                     } else {
