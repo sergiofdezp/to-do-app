@@ -1,3 +1,6 @@
+body .container {
+  max-width: 750px;
+}
 body h1 {
   color: #95B8D1;
 }
@@ -34,6 +37,15 @@ body .card-actions .btn-blue:hover {
 body #tasks_list {
   background-color: #C3DFE0;
   border-radius: 0.25rem;
+}
+body .modal-title {
+  color: #3C91E6;
+}
+body .modal-content {
+  background-color: #C3DFE0;
+}
+body input:hover, body textarea:hover {
+  border-color: #3C91E6;
 }
 @media only screen and (max-width: 425px) {
   body .card-body {

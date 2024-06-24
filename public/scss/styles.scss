@@ -4,6 +4,10 @@ $light_blue: #C3DFE0;
 $tufts_blue: #3C91E6;
 
 body{
+    .container{
+        max-width: 750px;
+    }
+
     h1{
         color: $powder_blue;
     }
@@ -51,6 +55,18 @@ body{
     #tasks_list{
         background-color: $light_blue;
         border-radius: .25rem;
+    }
+
+    .modal-title{
+        color: $tufts_blue;
+    }
+
+    .modal-content{
+        background-color: $light_blue;
+    }
+
+    input:hover, textarea:hover{
+        border-color: $tufts_blue;
     }
 
     @media only screen and (max-width: 425px) {

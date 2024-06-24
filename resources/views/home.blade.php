@@ -42,17 +42,14 @@
                                             
                                             <fieldset>
                                                 <div class="mb-3">
-                                                    <label for="title" class="form-label">Título de la tarea</label>
                                                     <input type="text" id="title" name="title" class="form-control" placeholder="Título de la tarea" required>
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label for="description" class="form-label">Descripción de la tarea</label>
-                                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                                    <textarea class="form-control" id="description" name="description" placeholder="Descripción de la tarea" rows="3"></textarea>
                                                 </div>
 
                                                 <div class="modal-footer text-end px-0 pb-0">
-                                                    <button type="button" class="btn btn-sm" data-bs-dismiss="modal">Cerrar</button>
                                                     <button type="submit" class="btn btn-success btn-tufts">Guardar</button>
                                                 </div>
                                             </fieldset>
