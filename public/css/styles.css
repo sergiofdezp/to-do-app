@@ -47,6 +47,9 @@ body .modal-content {
 body input:hover, body textarea:hover {
   border-color: #3C91E6;
 }
+body .custom-checkbox:hover {
+  background-color: #3C91E6 !important;
+}
 @media only screen and (max-width: 425px) {
   body .card-body {
     padding-bottom: 8px;

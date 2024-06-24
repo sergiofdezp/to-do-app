@@ -3,9 +3,7 @@
 @section('title', 'To-do-app')
 
 @section('content')
-    <div class="container vh-100">
-        <h1 class="text-center fw-bold pt-3 pb-3">LISTA DE TAREAS</h1>
-
+    <div class="container vh-100 pt-5">
         <main>
             <section>
                 <div class="row d-flex justify-content-center">
